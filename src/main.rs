@@ -79,12 +79,12 @@ fn main() {
             }
         };
 
-        (left_edge, right_edge) = next_best_guess(left_edge, right_edge, guess, is_too_big);
-
         if limit == cnt {
             println!("You have reached the limit!");
             println!("The secret number was: {secret_number}");
             break;
         }
+
+        (left_edge, right_edge) = next_best_guess(left_edge, right_edge, guess, is_too_big);
     }
 }
