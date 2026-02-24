@@ -59,7 +59,7 @@ fn main() {
 
     loop {
         cnt += 1;
-        let msg = format!("\nplease input your guess({cnt}/{limit}): ");
+        let msg = format!("\nPlease input your guess({cnt}/{limit}): ");
 
         let guess: u32 = get_number_input(&msg);
         println!("Your guess: {guess}");
