@@ -20,17 +20,42 @@ fn get_number_input(msg: &str) -> u32 {
     }
 }
 
+// TODO: when the guess is out of range
+fn next_best_guess(left_edge: u32, right_edge: u32, guess: u32, is_too_big: bool) -> (u32, u32) {
+    let mut new_left = left_edge;
+    let mut new_right = right_edge;
+
+    let next_best;
+    if is_too_big {
+        next_best = (left_edge + guess) / 2;
+        new_right = guess;
+    } else {
+        next_best = (right_edge + guess) / 2;
+        new_left = guess;
+    }
+
+    let msg = format!("Next best guess is: {next_best}");
+    println!("{msg}");
+
+    (new_left, new_right)
+}
+
 fn main() {
     println!("\n==============");
     println!("Guessing game!");
     println!("==============\n");
 
-    let secret_number = rand::rng().random_range(1..=100);
+    let mut left_edge: u32 = 1;
+    let mut right_edge: u32 = 100;
+
+    let secret_number = rand::rng().random_range(left_edge..=right_edge);
 
     let limit: u32 = get_number_input("Set limit of attempt: ");
     println!("Attempt limit: {limit}");
 
     let mut cnt: u32 = 0;
+
+    let mut is_too_big;
 
     loop {
         cnt += 1;
@@ -40,13 +65,21 @@ fn main() {
         println!("Your guess: {guess}");
 
         match guess.cmp(&secret_number) {
-            Ordering::Less => println!("Too small!"),
-            Ordering::Greater => println!("Too big!"),
+            Ordering::Less => {
+                println!("Too small!");
+                is_too_big = false;
+            }
+            Ordering::Greater => {
+                println!("Too big!");
+                is_too_big = true;
+            }
             Ordering::Equal => {
                 println!("You win!");
                 break;
             }
         };
+
+        (left_edge, right_edge) = next_best_guess(left_edge, right_edge, guess, is_too_big);
 
         if limit == cnt {
             println!("You have reached the limit!");
