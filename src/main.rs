@@ -21,7 +21,9 @@ fn get_number_input(msg: &str) -> u32 {
 }
 
 fn main() {
+    println!("\n==============");
     println!("Guessing game!");
+    println!("==============\n");
 
     let secret_number = rand::rng().random_range(1..=100);
 
@@ -32,7 +34,7 @@ fn main() {
 
     loop {
         cnt += 1;
-        let msg = format!("please input your guess({cnt}/{limit}): ");
+        let msg = format!("\nplease input your guess({cnt}/{limit}): ");
 
         let guess: u32 = get_number_input(&msg);
         println!("Your guess: {guess}");
