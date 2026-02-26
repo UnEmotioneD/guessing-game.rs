@@ -13,7 +13,7 @@ fn get_number_input(msg: &str) -> u32 {
             .read_line(&mut input)
             .expect("Failed to read line");
 
-        match input.trim().parse::<u32>() {
+        match input.trim().parse() {
             Ok(num) => break num,
             Err(_) => println!("Not a number"),
         };
