@@ -20,22 +20,20 @@ fn get_number_input(msg: &str) -> u32 {
     }
 }
 
-// TODO: when the guess is out of range
 fn next_best_guess(left_edge: u32, right_edge: u32, guess: u32, is_too_big: bool) -> (u32, u32) {
     let mut new_left = left_edge;
     let mut new_right = right_edge;
 
-    let next_best;
     if is_too_big {
-        next_best = (left_edge + guess) / 2;
-        new_right = guess;
-    } else {
-        next_best = (right_edge + guess) / 2;
+        if guess <= new_right {
+            new_right = guess;
+        }
+    } else if guess >= new_left {
         new_left = guess;
     }
+    let next_best = (new_right + new_left) / 2;
 
-    let msg = format!("Next best guess is: {next_best}");
-    println!("{msg}");
+    println!("Next best guess is: {next_best}");
 
     (new_left, new_right)
 }
@@ -45,10 +43,16 @@ fn main() {
     println!("Guessing game!");
     println!("==============\n");
 
-    let mut left_edge: u32 = 1;
-    let mut right_edge: u32 = 100;
+    // TODO: let user choose the range
+    let og_left: u32 = 1;
+    let og_right: u32 = 100;
+
+    let mut left_edge: u32 = og_left;
+    let mut right_edge: u32 = og_right;
 
     let secret_number = rand::rng().random_range(left_edge..=right_edge);
+
+    println!("Ranger: {left_edge} ~ {right_edge}");
 
     let limit: u32 = get_number_input("Set limit of attempt: ");
     println!("Attempt limit: {limit}");
@@ -60,7 +64,6 @@ fn main() {
     loop {
         cnt += 1;
         let msg = format!("\nPlease input your guess({cnt}/{limit}): ");
-
         let guess: u32 = get_number_input(&msg);
         println!("Your guess: {guess}");
 
@@ -83,6 +86,11 @@ fn main() {
             println!("You have reached the limit!");
             println!("The secret number was: {secret_number}");
             break;
+        }
+
+        if guess < og_left || guess > og_right {
+            println!("The guess is out of range.");
+            continue;
         }
 
         (left_edge, right_edge) = next_best_guess(left_edge, right_edge, guess, is_too_big);
