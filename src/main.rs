@@ -25,16 +25,15 @@ fn main() {
     println!("Guessing game!");
     println!("==============\n");
 
-    // TODO: let user choose the range
-    let og_left: u32 = 1;
-    let og_right: u32 = 100;
+    let og_left: u32 = get_number_input("Set start of range: ");
+    let og_right: u32 = get_number_input("Set end of range: ");
 
     let mut left_edge: u32 = og_left;
     let mut right_edge: u32 = og_right;
 
     let secret_number = rand::rng().random_range(left_edge..=right_edge);
 
-    println!("Ranger: {left_edge} ~ {right_edge}");
+    println!("Range: {left_edge} ~ {right_edge}");
 
     let limit: u32 = get_number_input("Set limit of attempt: ");
     println!("Attempt limit: {limit}");
