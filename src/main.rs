@@ -20,24 +20,6 @@ fn get_number_input(msg: &str) -> u32 {
     }
 }
 
-fn next_best_guess(left_edge: u32, right_edge: u32, guess: u32, is_too_big: bool) -> (u32, u32) {
-    let mut new_left = left_edge;
-    let mut new_right = right_edge;
-
-    if is_too_big {
-        if guess <= new_right {
-            new_right = guess;
-        }
-    } else if guess >= new_left {
-        new_left = guess;
-    }
-    let next_best = (new_right + new_left) / 2;
-
-    println!("Next best guess is: {next_best}");
-
-    (new_left, new_right)
-}
-
 fn main() {
     println!("\n==============");
     println!("Guessing game!");
@@ -88,11 +70,20 @@ fn main() {
             break;
         }
 
+        // check range
         if guess < og_left || guess > og_right {
             println!("The guess is out of range.");
             continue;
         }
 
-        (left_edge, right_edge) = next_best_guess(left_edge, right_edge, guess, is_too_big);
+        // narrow range
+        if is_too_big && (guess <= right_edge) {
+            right_edge = guess;
+        } else if guess >= left_edge {
+            left_edge = guess;
+        }
+
+        let next_best = (left_edge + right_edge) / 2;
+        println!("Next best guess is: {next_best}");
     }
 }
